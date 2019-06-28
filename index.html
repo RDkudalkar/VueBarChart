@@ -1,0 +1,100 @@
+
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<style type="text/css">
+	html, body {margin:0;padding:0;font-family: 'Montserrat', sans-serif;background:#f2f2f2;color: #1D2A33;font-size:12px;}
+	.section--wrapper {max-width: 600px;margin:0 auto 0;padding: 10px;}
+	.bar-graph{padding:0;width:100%;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-align-items:flex-end;-ms-flex-align:end;align-items:flex-end;height:425px;margin:0;border-bottom:solid 1px #ddd}
+	.bar-graph li{display:block;position:relative;text-align:center;vertical-align:bottom;border-radius:4px 4px 0 0;max-width:20%;height:100%;margin:0 5% 0 0;-webkit-flex:1 1 15%;-ms-flex:1 1 15%;flex:1 1 15%}
+	.bar-graph .bar-graph-axis{-webkit-flex:1 1 0;-ms-flex:1 1 0;flex:1 1 0;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;border-right:solid 1px #ddd}
+	.bar-graph .bar-graph-label{margin:0;font-weight:600;color:#8a8a8a;position:relative}
+	.bar-graph .bar-graph-label:after {}
+	.bar-graph .percent{display: none;padding: 3px 15px;letter-spacing: 0;font-size: 12px;position: absolute;top: -30px;background: #383838;color: #fff;left: 0;right: 0;width: 20px;margin: 0 auto;border-radius: 5px;}
+	.bar-graph .percent:after {content: '';display: inline-block;width: 0;height: 0;margin:0 auto 0;left: 0;right:0;bottom:-5px;vertical-align: middle;border-top: 5px solid #383838;border-right: 5px solid transparent;border-left: 5px solid transparent;position: absolute;}
+	.bar-graph .label{font-weight:600;opacity:.5;text-transform:uppercase;width:100%;font-size:14px;bottom:-30px;position:absolute;font-size:1rem;overflow:hidden}
+	.bar-graph .bar.primary{border:1px solid #1779ba;background:linear-gradient(#2196e3,#1779ba 70%);cursor: pointer;}
+	.bar-graph .bar.secondary {border: 1px solid #f27d1e;background: linear-gradient(#f09246,#f27d1e 70%);cursor: pointer;}
+	.text-left {text-align: right;font-weight: 600;}
+	.radioBtn input[type='radio'] {display: none;}
+	.radioBtn {position: relative;padding-left: 20px;margin-left: 10px;}
+	.radioBtn:before {content: '';position: absolute;width: 13px;height: 13px;display: inline-block;margin-top: 1px;left: 0;border-radius: 50%;}
+	.radioBtn.orange:before {background:#f27d1e;}
+	.radioBtn.blue:before {background:#1779ba;}
+	.bar:hover > .percent {display: block;}
+</style>
+</head>
+<body>
+
+	<div class="section--wrapper" id="app">
+		<div class="text-left">
+		    <label class="radioBtn blue"><input type="radio" name="test" :value="true" v-model="showcheck"/> Blue</label>
+		    <label class="radioBtn orange"><input type="radio" name="test" v-model="showcheck" :value="false"> Orange</label>
+       	</div>
+		<ul class="bar-graph">
+			<li class="bar-graph-axis">
+				<div class="bar-graph-label">100%</div>
+				<div class="bar-graph-label">80%</div>
+				<div class="bar-graph-label">60%</div>
+				<div class="bar-graph-label">40%</div>
+				<div class="bar-graph-label">20%</div>
+				<div class="bar-graph-label">0%</div>
+			</li>
+			<li class="bar" is="progressbar" v-for="progressbar in progressbar" v-bind:progressbar="progressbar" v-bind:class="classObject"></li>
+		</ul>
+	</div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+<script type="text/x-template" id="progressbar-template">
+	<li v-bind:style="{height: progressbar.barValue + '%'}" @mouseover="mouseOver"> 
+		<div class="percent">{{ progressbar.barValue }}</div>
+		<div class="label">{{ progressbar.xlabel }}</div>
+	</li>
+</script>
+<script>
+	Vue.component('progressbar', {
+		template: '#progressbar-template',
+		props: ['progressbar']
+	});
+	new Vue({
+		el: '#app',
+		data: {
+			active: true,
+			showcheck: true,
+			progressbar: [
+				{ 
+					xlabel: 'Jan',
+					barValue: '10',
+				},
+				{ 
+					xlabel: 'Feb',
+					barValue: '90',
+				},
+				{ 
+					xlabel: 'Mar',
+					barValue: '50',
+				},
+				{ 
+					xlabel: 'Apr',
+					barValue: '70',
+				},
+				{ 
+					xlabel: 'May',
+					barValue: '30',
+				}
+			]
+		},
+		computed: {
+		    classObject: function () {
+		      return {
+		        'primary': this.showcheck,
+		        'secondary': !this.showcheck
+		      }
+		    }
+		  }
+	});
+</script>
+</html>
